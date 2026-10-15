@@ -81,8 +81,8 @@ echo "   - Key : $KEY_FILE"
 if command -v docker &> /dev/null && [ -f "./docker-compose.yml" ] || [ -f "./compose.yaml" ]; then
     echo "🐳 Memeriksa status container Docker..."
     if docker compose ps --services 2>/dev/null | grep -qE "gateway|nginx|proxy"; then
-        docker compose up -d
-        echo "✅ Reverse proxy gateway berhasil di-reload."
+        docker compose exec -T gateway nginx -s reload 2>/dev/null || docker compose restart gateway 2>/dev/null || docker compose up -d
+        echo "✅ Reverse proxy gateway berhasil di-reload dengan sertifikat baru."
     fi
 fi
 
